@@ -50,6 +50,7 @@ const PostDetails: FC<IPostDetailsProps> = ({
     <Card className='relative'>
       <DeleteBtn
         disabled={isPending}
+        loading={isPending}
         onClick={onDeleteBtnClick}
       />
 

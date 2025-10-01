@@ -1,13 +1,14 @@
 import { FC, MouseEventHandler } from 'react';
-import { TrashIcon } from 'lucide-react';
+import { TrashIcon, Clock10Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface IDeleteBtnProps {
   onClick: MouseEventHandler;
-  disabled?: boolean;
+  disabled: boolean;
+  loading: boolean;
 }
 
-const DeleteBtn: FC<IDeleteBtnProps> = ({ onClick, disabled = false }) => {
+const DeleteBtn: FC<IDeleteBtnProps> = ({ onClick, disabled, loading }) => {
   return (
     <Button
       variant='destructive'
@@ -16,7 +17,7 @@ const DeleteBtn: FC<IDeleteBtnProps> = ({ onClick, disabled = false }) => {
       onClick={onClick}
       disabled={disabled}
     >
-      <TrashIcon />
+      {loading ? <Clock10Icon /> : <TrashIcon />}
     </Button>
   );
 };
