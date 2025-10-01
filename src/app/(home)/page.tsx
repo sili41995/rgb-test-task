@@ -17,6 +17,11 @@ const HomePage: FC = async () => {
     gcTime: 5 * 60 * 1000,
   });
 
+  const state = queryClient.getQueryState([QueryKeys.posts]);
+  if (state?.error) {
+    throw state.error;
+  }
+
   const dehydratedState = dehydrate(queryClient);
 
   return (

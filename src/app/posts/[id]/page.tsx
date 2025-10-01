@@ -23,14 +23,21 @@ const PostDetailsPage: FC<IPostDetailsPageProps> = async ({ params }) => {
   const { id } = await params;
 
   const queryClient = getQueryClient();
+  const itemKey = [QueryKeys.posts, id];
 
   await queryClient.prefetchQuery({
-    queryKey: [QueryKeys.posts, id],
+    queryKey: itemKey,
     queryFn: () => getPostById({ id, init: { cache: 'no-store' } }),
     staleTime: 1 * 10 * 1000,
   });
 
-  const post = queryClient.getQueryData([QueryKeys.posts, id]) as IPost;
+  const state = queryClient.getQueryState(itemKey);
+
+  if (state?.error) {
+    throw state.error;
+  }
+
+  const post = queryClient.getQueryData(itemKey) as IPost;
 
   if (!post) {
     notFound();

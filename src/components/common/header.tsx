@@ -15,7 +15,7 @@ interface IHeaderProps {
 
 const Header: FC<IHeaderProps> = ({ navLinks }) => {
   return (
-    <header className='flex justify-center'>
+    <header className='flex justify-center py-4'>
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
           {navLinks.map(({ href, title }) => (

@@ -1,19 +1,6 @@
 import { IGetPostByIdProps, IGetPostsRes } from '@/types/posts';
 import { IPost } from './types/posts';
-import { ISendRequestProps } from '@/types/common';
-
-const buildUrl = (...paths: string[]) =>
-  `${process.env.NEXT_PUBLIC_API_BASE_URL}/${paths.join('/')}`;
-
-const sendRequest = async <T>({ url, init }: ISendRequestProps) => {
-  const res = await fetch(url, init);
-
-  if (!res.ok) {
-    throw new Error(await res.text());
-  }
-
-  return (await res.json()) as T;
-};
+import { buildUrl, sendRequest } from './http-service';
 
 export const getPosts = (init?: RequestInit) => {
   const url = buildUrl('posts');
@@ -21,7 +8,7 @@ export const getPosts = (init?: RequestInit) => {
   return sendRequest<IGetPostsRes>({ url, init });
 };
 
-export const getPostById = ({ id, init }: IGetPostByIdProps) => {
+export const getPostById =  ({ id, init }: IGetPostByIdProps) => {
   const url = buildUrl('posts', id);
 
   return sendRequest<IPost>({ url, init });
