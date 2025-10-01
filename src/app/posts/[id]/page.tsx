@@ -2,10 +2,13 @@ import { FC } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getPost } from '@/api/posts';
+import { getPostById } from '@/api/posts';
 import { IPost } from '@/api/types/posts';
 import { QueryKeys } from '@/constants';
 import { getQueryClient } from '@/utils';
+import SectionTitle from '@/components/common/section-title';
+import Container from '@/components/common/container';
+import Text from '@/components/common/text';
 
 export const metadata: Metadata = {
   title: 'Details',
@@ -23,8 +26,8 @@ const PostDetailsPage: FC<IPostDetailsPageProps> = async ({ params }) => {
 
   await queryClient.prefetchQuery({
     queryKey: [QueryKeys.posts, id],
-    queryFn: () => getPost(id, { cache: 'no-store' }),
-    staleTime: 10 * 1000,
+    queryFn: () => getPostById({ id, init: { cache: 'no-store' } }),
+    staleTime: 1 * 10 * 1000,
   });
 
   const post = queryClient.getQueryData([QueryKeys.posts, id]) as IPost;
@@ -36,19 +39,14 @@ const PostDetailsPage: FC<IPostDetailsPageProps> = async ({ params }) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      {/* <div className='space-y-3'>
-        <PageTitle />
-        <section className='space-y-3'>
-          <SectionTitle />
-          <Container>
-            <HydrationBoundary state={dehydratedState}>
-              <Posts />
-            </HydrationBoundary>
-          </Container>
-        </section>
-      </div> */}
-    </HydrationBoundary>
+    <section>
+      <Container className='space-y-3'>
+        <HydrationBoundary state={dehydratedState}>
+          <SectionTitle title={post.title} />
+          <Text text={post.text} />
+        </HydrationBoundary>
+      </Container>
+    </section>
   );
 };
 

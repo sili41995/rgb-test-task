@@ -5,3 +5,8 @@ export interface IGetPostsRes {
   count: number;
   filteredCount: number;
 }
+
+export interface IGetPostByIdProps {
+  id: string;
+  init?: RequestInit;
+}

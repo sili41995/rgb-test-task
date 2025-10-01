@@ -5,10 +5,9 @@ import { getQueryClient } from '@/utils';
 import { QueryKeys } from '@/constants';
 import Posts from '@/components/posts/posts';
 import Container from '@/components/common/container';
-import PageTitle from '@/components/common/page-title';
 import SectionTitle from '@/components/common/section-title';
 
-const Home: FC = async () => {
+const HomePage: FC = async () => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -21,18 +20,15 @@ const Home: FC = async () => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className='space-y-3'>
-      <PageTitle title='Home' />
-      <section>
-        <Container className='space-y-3'>
-          <SectionTitle title='Posts' />
-          <HydrationBoundary state={dehydratedState}>
-            <Posts />
-          </HydrationBoundary>
-        </Container>
-      </section>
-    </div>
+    <section>
+      <Container className='space-y-3'>
+        <SectionTitle title='Posts' />
+        <HydrationBoundary state={dehydratedState}>
+          <Posts />
+        </HydrationBoundary>
+      </Container>
+    </section>
   );
 };
 
-export default Home;
+export default HomePage;

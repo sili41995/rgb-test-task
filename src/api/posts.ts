@@ -1,4 +1,4 @@
-import { IGetPostsRes } from '@/types/posts';
+import { IGetPostByIdProps, IGetPostsRes } from '@/types/posts';
 import { IPost } from './types/posts';
 import { ISendRequestProps } from '@/types/common';
 
@@ -21,7 +21,7 @@ export const getPosts = (init?: RequestInit) => {
   return sendRequest<IGetPostsRes>({ url, init });
 };
 
-export const getPost = (id: string, init?: RequestInit) => {
+export const getPostById = ({ id, init }: IGetPostByIdProps) => {
   const url = buildUrl('posts', id);
 
   return sendRequest<IPost>({ url, init });

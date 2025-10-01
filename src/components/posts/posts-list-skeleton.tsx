@@ -3,7 +3,7 @@ import PostsListItemSkeleton from '@/components/posts/posts-list-item-skeleton';
 
 const PostsListSkeleton: FC = () => {
   return (
-    <ul>
+    <ul className='space-y-10'>
       {[{}, {}, {}].map((_, index) => (
         <li key={index}>
           <PostsListItemSkeleton />
