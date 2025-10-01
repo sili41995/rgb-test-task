@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -7,17 +8,51 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import Link from 'next/link';
+import DeleteBtn from '@/components/posts/delete-btn';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QueryKeys } from '@/constants';
+import { deletePostById } from '@/api/posts';
 
 interface IPostDetailsProps {
   text: string;
   title: string;
   detailsPath: string;
+  id: number;
 }
 
-const PostDetails: FC<IPostDetailsProps> = ({ text, title, detailsPath }) => {
+const PostDetails: FC<IPostDetailsProps> = ({
+  text,
+  title,
+  detailsPath,
+  id,
+}) => {
+  const queryClient = useQueryClient();
+
+  const onDeleteSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: [QueryKeys.posts],
+    });
+  };
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: () =>
+      deletePostById({ id: String(id), init: { cache: 'no-store' } }),
+    onSuccess: onDeleteSuccess,
+  });
+
+  const onDeleteBtnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+
+    mutateAsync();
+  };
+
   return (
-    <Card>
+    <Card className='relative'>
+      <DeleteBtn
+        disabled={isPending}
+        onClick={onDeleteBtnClick}
+      />
+
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { IPost } from '@/api/types/posts';
 import PostDetails from '@/components/posts/post-details';
 import PagePaths from '@/constants/page-paths';
+import EmptyPostsListMessage from '@/components/posts/empty-posts-list-message';
 
 interface IPostsListProps {
   posts: IPost[] | undefined;
@@ -19,13 +20,14 @@ const PostsList: FC<IPostsListProps> = ({ posts }) => {
               text={text}
               title={title}
               detailsPath={detailsPath}
+              id={id}
             />
           </li>
         );
       })}
     </ul>
   ) : (
-    <div>emptyList</div>
+    <EmptyPostsListMessage />
   );
 };
 
