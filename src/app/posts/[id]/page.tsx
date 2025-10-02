@@ -7,7 +7,6 @@ import { IPost } from '@/api/types/posts';
 import { QueryKeys } from '@/constants';
 import { getQueryClient } from '@/utils';
 import SectionTitle from '@/components/common/section-title';
-import Container from '@/components/common/container';
 import Text from '@/components/common/text';
 
 export const metadata: Metadata = {
@@ -31,12 +30,6 @@ const PostDetailsPage: FC<IPostDetailsPageProps> = async ({ params }) => {
     staleTime: 1 * 10 * 1000,
   });
 
-  const state = queryClient.getQueryState(itemKey);
-
-  if (state?.error) {
-    throw state.error;
-  }
-
   const post = queryClient.getQueryData(itemKey) as IPost;
 
   if (!post) {
@@ -46,14 +39,12 @@ const PostDetailsPage: FC<IPostDetailsPageProps> = async ({ params }) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <section>
-      <Container className='space-y-3'>
-        <HydrationBoundary state={dehydratedState}>
-          <SectionTitle title={post.title} />
-          <Text text={post.text} />
-        </HydrationBoundary>
-      </Container>
-    </section>
+    <div className='space-y-3'>
+      <HydrationBoundary state={dehydratedState}>
+        <SectionTitle title={post.title} />
+        <Text text={post.text} />
+      </HydrationBoundary>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { IPost } from '@/api/types/posts';
-import PostDetails from '@/components/posts/post-details';
+import PostCard from '@/components/posts/post-card';
 import PagePaths from '@/constants/page-paths';
 import EmptyPostsListMessage from '@/components/posts/empty-posts-list-message';
 
@@ -16,7 +16,7 @@ const PostsList: FC<IPostsListProps> = ({ posts }) => {
 
         return (
           <li key={id}>
-            <PostDetails
+            <PostCard
               text={text}
               title={title}
               detailsPath={detailsPath}

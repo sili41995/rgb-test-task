@@ -2,40 +2,42 @@
 
 import { FC } from 'react';
 import z from 'zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { postFormSchema } from '@/validators/posts';
-import { addPost } from '@/api/posts';
-import PostForm from '@/components/posts/post-form';
+import { updatePostById } from '@/api/posts';
 import { QueryKeys } from '@/constants';
-import { getQueryClient } from '@/utils';
+import PostForm from '@/components/posts/post-form';
 
-const AddPostForm: FC = () => {
-  const queryClient = getQueryClient();
+interface IUpdatePostFormProps {
+  id: string;
+  text: string;
+  title: string;
+}
+
+const UpdatePostForm: FC<IUpdatePostFormProps> = ({ id, text, title }) => {
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof postFormSchema>>({
     resolver: zodResolver(postFormSchema),
     defaultValues: {
-      text: '',
-      title: '',
+      text,
+      title,
     },
   });
 
   const { mutateAsync, isPending, error } = useMutation({
-    mutationFn: addPost,
+    mutationFn: updatePostById,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.posts],
-        exact: false,
+        queryKey: [QueryKeys.posts, id],
       });
     },
   });
 
   const onSubmit = async (data: z.infer<typeof postFormSchema>) => {
-    await mutateAsync({ data, init: { cache: 'no-store' } });
-
-    form.reset();
+    await mutateAsync({ data, id, init: { cache: 'no-store' } });
   };
 
   const onFormSubmit = form.handleSubmit(onSubmit);
@@ -46,9 +48,9 @@ const AddPostForm: FC = () => {
       onSubmit={onFormSubmit}
       error={error}
       isPending={isPending}
-      actionBtnLabel='Add'
+      actionBtnLabel='Update'
     />
   );
 };
 
-export default AddPostForm;
+export default UpdatePostForm;

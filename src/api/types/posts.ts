@@ -13,12 +13,23 @@ export interface IGetPostsRes {
   filteredCount: number;
 }
 
-export interface IReqByIdProps {
-  id: string;
+export interface IPostReqProps {
   init?: RequestInit;
 }
 
-export interface IAddPostProps {
+export interface IGetPostsProps extends IPostReqProps {
+  page: number;
+}
+
+export interface IReqByIdProps extends IPostReqProps {
+  id: string;
+}
+
+export interface IAddPostProps extends IPostReqProps {
   data: z.infer<typeof postFormSchema>;
   init?: RequestInit;
+}
+
+export interface IUpdatePostByIdProps extends IAddPostProps {
+  id: string;
 }

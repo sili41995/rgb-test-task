@@ -3,6 +3,7 @@ const enum PagePaths {
   posts = '/posts',
   about = '/about',
   add = `${posts}/add`,
+  edit = 'edit',
   dynamicParam = 'id',
 }
 

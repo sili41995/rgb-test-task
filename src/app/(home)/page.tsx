@@ -7,17 +7,30 @@ import Posts from '@/components/posts/posts';
 import Container from '@/components/common/container';
 import SectionTitle from '@/components/common/section-title';
 
-const HomePage: FC = async () => {
+interface IHomePageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+const HomePage: FC<IHomePageProps> = async ({ searchParams }) => {
   const queryClient = getQueryClient();
+  const { page } = await searchParams;
+
+  const pageNumber = Number(page ?? 1);
 
   await queryClient.prefetchQuery({
-    queryKey: [QueryKeys.posts],
-    queryFn: () => getPosts({ cache: 'no-store' }),
+    queryKey: [QueryKeys.posts, pageNumber],
+    queryFn: () =>
+      getPosts({
+        page: pageNumber,
+        init: {
+          cache: 'no-store',
+        },
+      }),
     staleTime: 1 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
   });
 
-  const state = queryClient.getQueryState([QueryKeys.posts]);
+  const state = queryClient.getQueryState([QueryKeys.posts, page]);
   if (state?.error) {
     throw state.error;
   }
@@ -29,7 +42,7 @@ const HomePage: FC = async () => {
       <Container className='space-y-3'>
         <SectionTitle title='Posts' />
         <HydrationBoundary state={dehydratedState}>
-          <Posts />
+          <Posts page={pageNumber} />
         </HydrationBoundary>
       </Container>
     </section>

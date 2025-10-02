@@ -13,19 +13,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/constants';
 import { deletePostById } from '@/api/posts';
 
-interface IPostDetailsProps {
+interface IPostCardProps {
   text: string;
   title: string;
   detailsPath: string;
   id: number;
 }
 
-const PostDetails: FC<IPostDetailsProps> = ({
-  text,
-  title,
-  detailsPath,
-  id,
-}) => {
+const PostCard: FC<IPostCardProps> = ({ text, title, detailsPath, id }) => {
   const queryClient = useQueryClient();
 
   const onDeleteSuccess = () => {
@@ -74,4 +69,4 @@ const PostDetails: FC<IPostDetailsProps> = ({
   );
 };
 
-export default PostDetails;
+export default PostCard;
